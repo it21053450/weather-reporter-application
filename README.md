@@ -1,51 +1,85 @@
-# Weather Application
+# Weather Reporter 🌤️
 
-A modern, responsive weather application that displays current weather information for any location worldwide.
+A modern and responsive web application that provides current weather information for any location worldwide. Built with a professional and intuitive user interface, it offers a seamless weather checking experience.
 
-## Features
+## ✨ Features
 
-- Current weather display for any location
-- Dark/Light mode toggle
-- Responsive design for all screen sizes
-- Loading states with spinner
-- Weather icons
-- Search functionality for any city
-- Displays:
-  - Temperature
-  - Feels like temperature
-  - Humidity
-  - Wind speed
-  - UV Index
+-   **Current Weather:** Displays real-time temperature, condition, and "feels like" temperature.
+-   **Location Search:** Easily search for weather information for any city.
+-   **Weather Highlights:** Get quick insights into humidity, wind speed and direction, and UV Index with visual indicators.
+-   **Additional Information:** View crucial details like visibility, atmospheric pressure, sunrise, and sunset times.
+-   **Dark/Light Mode:** Toggle between beautiful dark and light themes for comfortable viewing.
+-   **Responsive Design:** Optimized for a flawless experience across all devices and screen sizes.
+-   **Loading States:** Smooth loading indicators for a better user experience.
 
-## Setup
+## 🚀 Technologies Used
 
-1. Clone this repository
-2. Sign up for a free API key at [WeatherAPI.com](https://www.weatherapi.com/)
-3. Open `script.js` and replace `YOUR_API_KEY` with your actual API key
-4. Open `index.html` in your web browser
+-   **HTML5:** Structure and content.
+-   **CSS3:** Modern styling with CSS variables for theming and responsive design (Flexbox & Grid).
+-   **JavaScript (ES6+):** Dynamic content updates and API interactions.
+-   **[WeatherAPI.com](https://www.weatherapi.com/)**: Reliable and free weather data API.
+-   **[Font Awesome 6](https://fontawesome.com/):** Beautiful and scalable vector icons.
 
-## Usage
+## 🛠️ Setup and Usage
 
-- The application will automatically load weather data for Colombo, Sri Lanka
-- Use the search bar to look up weather for any city worldwide
-- Toggle between dark and light mode using the moon/sun icon in the top right
-- Press Enter or click the search button to search for a new location
+Follow these simple steps to get the Weather Reporter up and running on your local machine:
 
-## Technologies Used
+### 1. Get your API Key
 
-- HTML5
-- CSS3 (with CSS Variables for theming)
-- JavaScript (ES6+)
-- WeatherAPI.com API
-- Font Awesome icons
+To fetch weather data, you'll need a free API key from WeatherAPI.com:
 
-## Browser Support
+1.  Go to [WeatherAPI.com](https://www.weatherapi.com/).
+2.  Sign up for a free account.
+3.  Once registered, navigate to your dashboard to find your API key.
 
-The application works on all modern browsers that support:
-- ES6+ JavaScript
-- CSS Variables
-- Fetch API
+### 2. Configure the API Key
 
-## License
+Open the `script.js` file in your project and replace `YOUR_API_KEY` with the actual API key you obtained from WeatherAPI.com:
 
-MIT License 
+```javascript
+const API_KEY = 'YOUR_API_KEY'; // Replace with your WeatherAPI.com API key
+```
+
+### 3. Run the Application
+
+There are two easy ways to run the application:
+
+#### Option 1: Open `index.html` Directly
+
+Simply double-click the `index.html` file in your project folder, or drag and drop it into your web browser. The application will open immediately.
+
+#### Option 2: Use a Local Development Server (Recommended for full functionality)
+
+For a more robust local development experience, especially if you encounter any browser security restrictions (e.g., related to fetching data locally), you can use a simple HTTP server. If you have Python installed, you can use its built-in server:
+
+1.  Open your terminal or command prompt.
+2.  Navigate to your project directory:
+    ```bash
+    cd "/c%3A/Users/User/OneDrive - Sri Lanka Institute of Information Technology/Desktop/Weather Application Use API"
+    ```
+3.  Run the Python HTTP server:
+    ```bash
+    python -m http.server 8000
+    ```
+4.  Open your web browser and go to `http://localhost:8000`.
+
+To stop the server, press `Ctrl + C` in your terminal.
+
+## 📝 Usage
+
+-   The application will initially display weather data for **Colombo, Sri Lanka**.
+-   Use the search bar at the top right to look up weather for any city worldwide.
+-   Toggle between **dark mode** and **light mode** using the moon/sun icon in the header.
+-   Click the **Refresh Weather** button at the bottom to update the current weather data for the displayed location.
+
+## 🌐 Browser Support
+
+This application is designed to work seamlessly on all modern web browsers that support:
+
+-   ES6+ JavaScript
+-   CSS Variables
+-   Fetch API
+
+## 📄 License
+
+This project is licensed under the MIT License - see the `LICENSE` file for details (if you plan to add one). 
