@@ -48,20 +48,24 @@ There are two easy ways to run the application:
 
 Simply double-click the `index.html` file in your project folder, or drag and drop it into your web browser. The application will open immediately.
 
-#### Option 2: Use a Local Development Server (Recommended for full functionality)
+#### Option 2: Use a Local Development Server (Optional)
 
-For a more robust local development experience, especially if you encounter any browser security restrictions (e.g., related to fetching data locally), you can use a simple HTTP server. If you have Python installed, you can use its built-in server:
+For a more robust local development experience, especially if you encounter any browser security restrictions (e.g., related to fetching data locally, like CORS issues with some APIs), you can use any simple HTTP server. If you have Node.js installed, `http-server` is a popular choice:
 
 1.  Open your terminal or command prompt.
 2.  Navigate to your project directory:
     ```bash
-    cd "/c%3A/Users/User/OneDrive - Sri Lanka Institute of Information Technology/Desktop/Weather Application Use API"
+    cd your-project-directory
     ```
-3.  Run the Python HTTP server:
+3.  Install `http-server` globally (if you haven't already):
     ```bash
-    python -m http.server 8000
+    npm install -g http-server
     ```
-4.  Open your web browser and go to `http://localhost:8000`.
+4.  Run the server:
+    ```bash
+    http-server
+    ```
+5.  Open your web browser and go to `http://localhost:8080` (or the address shown in your terminal).
 
 To stop the server, press `Ctrl + C` in your terminal.
 
