@@ -8,29 +8,37 @@ const searchBtn = document.getElementById('search-btn');
 const themeToggle = document.getElementById('theme-toggle');
 const loadingSpinner = document.getElementById('loading-spinner');
 const weatherInfo = document.getElementById('weather-info');
-const unitToggle = document.getElementById('unit-toggle');
 const refreshBtn = document.getElementById('refresh-btn');
-const addFavoriteBtn = document.getElementById('add-favorite-btn');
-const favoritesList = document.getElementById('favorites-list');
-const currentDate = document.getElementById('current-date');
-const currentTime = document.getElementById('current-time');
 
-// Weather Info Elements
-const cityName = document.getElementById('city-name');
-const country = document.getElementById('country');
+// Main Weather Card Elements
 const temperature = document.getElementById('temperature');
+const tempUnit = document.getElementById('temp-unit');
 const weatherIcon = document.getElementById('weather-icon');
+const weatherCondition = document.getElementById('weather-condition');
 const feelsLike = document.getElementById('feels-like');
-const humidity = document.getElementById('humidity');
-const windSpeed = document.getElementById('wind-speed');
-const uvIndex = document.getElementById('uv-index');
+const lastUpdated = document.getElementById('last-updated');
+
+// Highlights Elements
+const temperatureHighlight = document.getElementById('temperature-highlight');
+const feelsLikeHighlight = document.getElementById('feels-like-highlight');
+const humidityHighlight = document.getElementById('humidity-highlight');
+const humidityProgress = document.getElementById('humidity-progress');
+const windSpeedHighlight = document.getElementById('wind-speed-highlight');
+const windDirection = document.getElementById('wind-direction');
+const uvIndexHighlight = document.getElementById('uv-index-highlight');
+const uvLabel = document.getElementById('uv-label');
+
+// Additional Info Elements
+const visibility = document.getElementById('visibility');
+const pressure = document.getElementById('pressure');
 const sunrise = document.getElementById('sunrise');
 const sunset = document.getElementById('sunset');
 
+// Footer Elements
+const footerLastUpdated = document.getElementById('footer-last-updated');
+
 // State
-let currentLocation = 'Colombo';
-let isCelsius = true;
-let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+let currentCity = 'Colombo';
 
 // Theme Toggle
 themeToggle.addEventListener('click', () => {
@@ -42,24 +50,6 @@ themeToggle.addEventListener('click', () => {
         icon.classList.replace('fa-sun', 'fa-moon');
     }
 });
-
-// Update Date and Time
-function updateDateTime() {
-    const now = new Date();
-    currentDate.textContent = now.toLocaleDateString('en-US', { 
-        weekday: 'long', 
-        year: 'numeric', 
-        month: 'long', 
-        day: 'numeric' 
-    });
-    currentTime.textContent = now.toLocaleTimeString('en-US', { 
-        hour: '2-digit', 
-        minute: '2-digit' 
-    });
-}
-
-setInterval(updateDateTime, 1000);
-updateDateTime();
 
 // Show Loading Spinner
 function showLoading() {
@@ -73,24 +63,12 @@ function hideLoading() {
     weatherInfo.style.opacity = '1';
 }
 
-// Convert Temperature
-function convertTemperature(temp) {
-    return isCelsius ? temp : (temp * 9/5) + 32;
-}
-
-// Update Temperature Display
-function updateTemperatureDisplay(temp) {
-    const convertedTemp = Math.round(convertTemperature(temp));
-    temperature.textContent = convertedTemp;
-    temperature.innerHTML += isCelsius ? '°C' : '°F';
-}
-
 // Fetch Weather Data
 async function fetchWeatherData(location) {
     try {
         showLoading();
         const response = await fetch(
-            `${BASE_URL}/forecast.json?key=${API_KEY}&q=${location}&days=3&aqi=yes&alerts=no`
+            `${BASE_URL}/forecast.json?key=${API_KEY}&q=${location}&days=1&aqi=no`
         );
         
         if (!response.ok) {
@@ -99,11 +77,7 @@ async function fetchWeatherData(location) {
 
         const data = await response.json();
         updateWeatherUI(data);
-        updateHourlyForecast(data);
-        updateAirQuality(data);
-        updateSunTimes(data);
-        updateForecast(data);
-        currentLocation = location;
+        currentCity = location;
     } catch (error) {
         alert('Error fetching weather data. Please try again.');
         console.error('Error:', error);
@@ -114,115 +88,59 @@ async function fetchWeatherData(location) {
 
 // Update Weather UI
 function updateWeatherUI(data) {
-    const { location, current } = data;
+    const { location, current, forecast } = data;
+    const astro = forecast.forecastday[0].astro;
     
-    cityName.textContent = location.name;
-    country.textContent = location.country;
-    updateTemperatureDisplay(current.temp_c);
-    feelsLike.textContent = Math.round(convertTemperature(current.feelslike_c));
-    humidity.textContent = current.humidity;
-    windSpeed.textContent = current.wind_kph;
-    uvIndex.textContent = current.uv;
-    
+    // Main Weather Card
+    document.getElementById('current-display-location').textContent = `${location.name}, ${location.region}, ${location.country}`;
+    temperature.textContent = Math.round(current.temp_c);
     weatherIcon.src = `https:${current.condition.icon}`;
     weatherIcon.alt = current.condition.text;
+    weatherCondition.textContent = current.condition.text;
+    feelsLike.textContent = Math.round(current.feelslike_c);
+    lastUpdated.textContent = new Date(current.last_updated_epoch * 1000).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+
+    // Highlights
+    temperatureHighlight.textContent = Math.round(current.temp_c);
+    feelsLikeHighlight.textContent = Math.round(current.feelslike_c);
+
+    humidityHighlight.textContent = current.humidity;
+    humidityProgress.style.width = `${current.humidity}%`;
+
+    windSpeedHighlight.textContent = current.wind_kph;
+    windDirection.textContent = `${current.wind_dir} ${current.wind_mph} mph`;
+
+    uvIndexHighlight.textContent = current.uv;
+    updateUvLabel(current.uv);
+
+    // Additional Info
+    visibility.textContent = `${current.vis_km} km`;
+    pressure.textContent = `${current.pressure_mb} mb`;
+    sunrise.textContent = astro.sunrise;
+    sunset.textContent = astro.sunset;
+
+    // Footer
+    footerLastUpdated.textContent = new Date(current.last_updated_epoch * 1000).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
 }
 
-// Update Hourly Forecast
-function updateHourlyForecast(data) {
-    const hourlyContainer = document.getElementById('hourly-forecast');
-    hourlyContainer.innerHTML = '';
-
-    const hours = data.forecast.forecastday[0].hour;
-    const currentHour = new Date().getHours();
-
-    for (let i = currentHour; i < currentHour + 24; i++) {
-        const hour = hours[i % 24];
-        const hourElement = document.createElement('div');
-        hourElement.className = 'hourly-item';
-        
-        const time = new Date(hour.time);
-        hourElement.innerHTML = `
-            <div>${time.getHours()}:00</div>
-            <img src="https:${hour.condition.icon}" alt="${hour.condition.text}">
-            <div>${Math.round(convertTemperature(hour.temp_c))}°</div>
-        `;
-        
-        hourlyContainer.appendChild(hourElement);
+function updateUvLabel(uv) {
+    let label = '';
+    let className = '';
+    if (uv <= 2) {
+        label = 'Low';
+        className = 'uv-low';
+    } else if (uv <= 5) {
+        label = 'Moderate';
+        className = 'uv-moderate';
+    } else if (uv <= 7) {
+        label = 'High';
+        className = 'uv-high';
+    } else {
+        label = 'Extreme';
+        className = 'uv-extreme';
     }
-}
-
-// Update Air Quality
-function updateAirQuality(data) {
-    const aqiContainer = document.getElementById('air-quality');
-    const aqi = data.current.air_quality;
-    
-    const aqiValue = Math.round(aqi['us-epa-index']);
-    const aqiLabel = getAQILabel(aqiValue);
-    
-    aqiContainer.innerHTML = `
-        <div class="aqi-value">${aqiValue}</div>
-        <div class="aqi-label">${aqiLabel}</div>
-    `;
-}
-
-function getAQILabel(value) {
-    const labels = {
-        1: 'Good',
-        2: 'Moderate',
-        3: 'Unhealthy for Sensitive Groups',
-        4: 'Unhealthy',
-        5: 'Very Unhealthy',
-        6: 'Hazardous'
-    };
-    return labels[value] || 'Unknown';
-}
-
-// Update Sun Times
-function updateSunTimes(data) {
-    const { sunrise: sunriseTime, sunset: sunsetTime } = data.forecast.forecastday[0].astro;
-    sunrise.textContent = sunriseTime;
-    sunset.textContent = sunsetTime;
-}
-
-// Update 3-Day Forecast
-function updateForecast(data) {
-    const forecastContainer = document.getElementById('forecast');
-    forecastContainer.innerHTML = '';
-
-    data.forecast.forecastday.forEach(day => {
-        const date = new Date(day.date);
-        const forecastElement = document.createElement('div');
-        forecastElement.className = 'forecast-item';
-        
-        forecastElement.innerHTML = `
-            <div>${date.toLocaleDateString('en-US', { weekday: 'short' })}</div>
-            <img src="https:${day.day.condition.icon}" alt="${day.day.condition.text}">
-            <div>${Math.round(convertTemperature(day.day.maxtemp_c))}°</div>
-            <div>${Math.round(convertTemperature(day.day.mintemp_c))}°</div>
-        `;
-        
-        forecastContainer.appendChild(forecastElement);
-    });
-}
-
-// Favorites Management
-function updateFavoritesList() {
-    favoritesList.innerHTML = '';
-    favorites.forEach(favorite => {
-        const li = document.createElement('li');
-        li.textContent = favorite;
-        li.addEventListener('click', () => fetchWeatherData(favorite));
-        favoritesList.appendChild(li);
-    });
-}
-
-function addToFavorites() {
-    if (!favorites.includes(currentLocation)) {
-        favorites.push(currentLocation);
-        localStorage.setItem('favorites', JSON.stringify(favorites));
-        updateFavoritesList();
-    }
+    uvLabel.textContent = label;
+    uvLabel.className = `uv-label ${className}`;
 }
 
 // Event Listeners
@@ -242,17 +160,9 @@ locationInput.addEventListener('keypress', (e) => {
     }
 });
 
-unitToggle.addEventListener('change', (e) => {
-    isCelsius = e.target.value === 'celsius';
-    fetchWeatherData(currentLocation);
-});
-
 refreshBtn.addEventListener('click', () => {
-    fetchWeatherData(currentLocation);
+    fetchWeatherData(currentCity);
 });
 
-addFavoriteBtn.addEventListener('click', addToFavorites);
-
-// Initialize
-updateFavoritesList();
-fetchWeatherData(currentLocation); 
+// Initial load for Colombo
+fetchWeatherData(currentCity); 
