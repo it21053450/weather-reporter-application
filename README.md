@@ -1,7 +1,7 @@
 # Weather Reporter 🌤️
 
 A modern and responsive web application that provides current weather information for any location worldwide. Built with a professional and intuitive user interface, it offers a seamless weather checking experience.
-                   - **Check it out here: https://weather-reporter-application.vercel.app/ 
+                  <b> - **Check it out here: https://weather-reporter-application.vercel.app/ 
 
 ## ✨ Features
 
