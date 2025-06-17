@@ -55,13 +55,17 @@ For a more robust local development experience, especially if you encounter any 
 1.  Open your terminal or command prompt.
 2.  Navigate to your project directory:
     ```bash
-    cd "/c%3A/Users/User/OneDrive - Sri Lanka Institute of Information Technology/Desktop/Weather Application Use API"
+    cd your-project-directory
     ```
-3.  Run the Python HTTP server:
+3.  Install `http-server` globally (if you haven't already):
     ```bash
-    python -m http.server 8000
+    npm install -g http-server
     ```
-4.  Open your web browser and go to `http://localhost:8000`.
+4.  Run the server:
+    ```bash
+    http-server
+    ```
+5.  Open your web browser and go to `http://localhost:8080` (or the address shown in your terminal).
 
 To stop the server, press `Ctrl + C` in your terminal.
 
