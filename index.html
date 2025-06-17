@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="light-mode">
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h1>Weather<span>Dash</span></h1>
+                <button id="theme-toggle" class="theme-toggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+            
+            <div class="search-container">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="location-input" placeholder="Search location...">
+                </div>
+                <button id="search-btn">Search</button>
+            </div>
+
+            <div class="favorites">
+                <h3>Favorites</h3>
+                <ul id="favorites-list">
+                    <!-- Favorites will be added here dynamically -->
+                </ul>
+            </div>
+
+            <div class="sidebar-footer">
+                <div class="user-preferences">
+                    <h3>Preferences</h3>
+                    <div class="preference-item">
+                        <label for="unit-toggle">Temperature Unit</label>
+                        <select id="unit-toggle">
+                            <option value="celsius">Celsius (°C)</option>
+                            <option value="fahrenheit">Fahrenheit (°F)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="top-bar">
+                <div class="date-time">
+                    <div id="current-date"></div>
+                    <div id="current-time"></div>
+                </div>
+                <div class="quick-actions">
+                    <button id="refresh-btn" title="Refresh">
+                        <i class="fas fa-sync-alt"></i>
+                    </button>
+                    <button id="add-favorite-btn" title="Add to Favorites">
+                        <i class="fas fa-star"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="dashboard-grid">
+                <!-- Current Weather Widget -->
+                <div class="widget current-weather">
+                    <div class="loading-spinner" id="loading-spinner">
+                        <div class="spinner"></div>
+                    </div>
+                    
+                    <div class="weather-info" id="weather-info">
+                        <div class="location">
+                            <h2 id="city-name">Colombo</h2>
+                            <p id="country">Sri Lanka</p>
+                        </div>
+                        
+                        <div class="weather-main">
+                            <div class="temperature">
+                                <span id="temperature">--</span>
+                            </div>
+                            <div class="weather-icon">
+                                <img id="weather-icon" src="" alt="Weather icon">
+                            </div>
+                        </div>
+
+                        <div class="weather-details">
+                            <div class="detail">
+                                <i class="fas fa-temperature-high"></i>
+                                <span>Feels like: </span>
+                                <span id="feels-like">--</span>°C
+                            </div>
+                            <div class="detail">
+                                <i class="fas fa-tint"></i>
+                                <span>Humidity: </span>
+                                <span id="humidity">--</span>%
+                            </div>
+                            <div class="detail">
+                                <i class="fas fa-wind"></i>
+                                <span>Wind: </span>
+                                <span id="wind-speed">--</span> km/h
+                            </div>
+                            <div class="detail">
+                                <i class="fas fa-sun"></i>
+                                <span>UV Index: </span>
+                                <span id="uv-index">--</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hourly Forecast Widget -->
+                <div class="widget hourly-forecast">
+                    <h3>Hourly Forecast</h3>
+                    <div class="hourly-container" id="hourly-forecast">
+                        <!-- Hourly forecast will be added here dynamically -->
+                    </div>
+                </div>
+
+                <!-- Air Quality Widget -->
+                <div class="widget air-quality">
+                    <h3>Air Quality</h3>
+                    <div class="aqi-container" id="air-quality">
+                        <div class="aqi-value">--</div>
+                        <div class="aqi-label">Loading...</div>
+                    </div>
+                </div>
+
+                <!-- Sunrise/Sunset Widget -->
+                <div class="widget sun-times">
+                    <h3>Sun Times</h3>
+                    <div class="sun-container">
+                        <div class="sun-time">
+                            <i class="fas fa-sunrise"></i>
+                            <span id="sunrise">--:--</span>
+                        </div>
+                        <div class="sun-time">
+                            <i class="fas fa-sunset"></i>
+                            <span id="sunset">--:--</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3-Day Forecast Widget -->
+                <div class="widget forecast">
+                    <h3>3-Day Forecast</h3>
+                    <div class="forecast-container" id="forecast">
+                        <!-- Forecast will be added here dynamically -->
+                    </div>
+                </div>
+
+                <!-- Weather Map Widget -->
+                <div class="widget weather-map">
+                    <h3>Weather Map</h3>
+                    <div class="map-container" id="weather-map">
+                        <!-- Map will be added here dynamically -->
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html> 
